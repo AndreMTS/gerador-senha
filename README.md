@@ -1,6 +1,6 @@
 # Gerador de Senhas Personalizado
 
-![Imagem do Gerador de Senhas](link_para_sua_imagem.png)
+![Imagem do Gerador de Senhas](https://ibb.co/cYLhQyS)
 
 ## Descrição
 
