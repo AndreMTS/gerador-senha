@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas Personalizado</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.12.0/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div id="q-app">
+        <q-layout view="hHh lpR fFf">
+            <q-page-container>
+                <q-page class="flex flex-center">
+                    <q-card style="width: 350px">
+                        <q-card-section class="">
+                            <div style="    text-align: center;" class="text-h6 text-uppercase">Gerador de Senhas</div>
+                        </q-card-section>
+                        <q-card-section>
+                            <q-input v-model="senha" readonly label="Senha gerada" :disable="!senha">
+                                <template v-slot:append>
+                                    <q-btn round flat icon="content_copy" @click="copiarSenha" :disable="!senha">
+                                        <q-tooltip>Copiar senha</q-tooltip>
+                                    </q-btn>
+                                </template>
+                            </q-input>
+                        </q-card-section>
+                        <q-card-section>
+                            <q-slider v-model="tamanho" :min="4" label-always switch-label-side :max="32" label :label-value="`${tamanho} caracteres`" />
+                        </q-card-section>
+                        <q-card-section>
+                            <q-option-group v-model="opcoesSelecionadas" :options="opcoes" type="checkbox" />
+                        </q-card-section>
+                        <q-card-actions align="center">
+                            <q-btn class="full-width" color="primary" label="Gerar senha" @click="gerarSenha">
+                                <q-icon left size="2em" name="cached" class="q-ml-sm" />
+                            </q-btn>
+                        </q-card-actions>
+                    </q-card>
+                </q-page>
+            </q-page-container>
+        </q-layout>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.12.0/dist/quasar.umd.prod.js"></script>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    senha: '',
+                    tamanho: 12,
+                    opcoesSelecionadas: ['maiusculas', 'minusculas', 'numeros', 'simbolos'],
+                    opcoes: [
+                        { label: 'Letras maiúsculas', value: 'maiusculas' },
+                        { label: 'Letras minúsculas', value: 'minusculas' },
+                        { label: 'Números', value: 'numeros' },
+                        { label: 'Símbolos', value: 'simbolos' }
+                    ],
+                    fontes: {
+                        maiusculas: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                        minusculas: 'abcdefghijklmnopqrstuvwxyz',
+                        numeros: '0123456789',
+                        simbolos: '!@#$%^&*()_+'
+                    }
+                };
+            },
+            methods: {
+                gerarSenha() {
+                    let caracteres = '';
+                    this.opcoesSelecionadas.forEach(opcao => {
+                        caracteres += this.fontes[opcao];
+                    });
+
+                    if (!caracteres) {
+                        this.$q.notify({
+                            message: 'Selecione pelo menos um tipo de caractere.',
+                            color: 'negative'
+                        });
+                        return;
+                    }
+
+                    this.senha = Array(this.tamanho)
+                        .fill()
+                        .map(() => caracteres.charAt(Math.floor(Math.random() * caracteres.length)))
+                        .join('');
+
+                    this.$q.notify({
+                        message: 'Senha gerada com sucesso!',
+                        color: 'positive'
+                    });
+                },
+                copiarSenha() {
+                    navigator.clipboard.writeText(this.senha)
+                        .then(() => {
+                            this.$q.notify({
+                                message: 'Senha copiada para a área de transferência!',
+                                color: 'positive'
+                            });
+                        })
+                        .catch(() => {
+                            this.$q.notify({
+                                message: 'Falha ao copiar senha!',
+                                color: 'negative'
+                            });
+                        });
+                }
+            }
+        });
+
+        app.use(Quasar, { config: {} });
+        app.mount('#q-app');
+    </script>
+</body>
+
+</html>
