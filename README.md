@@ -24,7 +24,8 @@ Este projeto é um Gerador de Senhas Personalizado desenvolvido com Vue.js 3 e Q
 
 ## Demonstração
 
-[Link para uma demonstração ao vivo do projeto](https://andremts-gerador-senha.surge.sh/)
+[Link para uma demonstração Github Pages](https://andremts.github.io/gerador-senha/)
+[Link para uma demonstração Surge](https://andremts-gerador-senha.surge.sh/)
 
 ## Licença
 
